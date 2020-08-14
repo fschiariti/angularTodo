@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../../models/Todo';
 import { TodoService } from '../../services/todo.service'
+import { getLocaleExtraDayPeriods } from '@angular/common';
 
 @Component({
   selector: 'app-todos',
@@ -16,9 +17,8 @@ export class TodosComponent implements OnInit {
   constructor(private todoService:TodoService) { }
 
   ngOnInit(): void {
-    this.todoService.getTodos().subscribe( todos => {
-      this.todos = todos;
-    });
+
+    this.getTodos();
   }
 
   deleteTodo(todo:Todo) {
@@ -36,5 +36,22 @@ export class TodosComponent implements OnInit {
     });
   }
 
+  getTodos() {
+    this.todoService.getTodos().subscribe( todos => {
+      this.todos = todos;
+    });    
+  }
+
+  searchTodos(todo:Todo) {
+    //Search from ui
+    if (todo.title) {
+      this.todos = this.todos.filter(t=> t.title.indexOf(todo.title) > -1);
+    }
+    else {
+      this.todoService.getTodos().subscribe( todos => {
+        this.todos = todos;
+      });      
+    }
+  }
 
 }
