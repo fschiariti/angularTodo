@@ -14,11 +14,22 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class TodoService {
-  todosUrl: string =  'https://jsonplaceholder.typicode.com/todos';
+//  todosUrl: string =  'https://jsonplaceholder.typicode.com/todos';
+  todosUrl: string =  ' http://localhost:3000/api/todos';
 
   todosLimit = '?_limit=5'
 
   constructor(private http: HttpClient) { }
+
+
+  //Get todo
+
+  getTodo(id: string): Observable<Todo> {
+    // TODO: send the message _after_ fetching the hero
+
+    return this.http.get<Todo>(`${this.todosUrl}/${id}`)
+
+  }
 
   //Get todos
 
@@ -45,6 +56,15 @@ export class TodoService {
 
   addTodo(todo: Todo):Observable<Todo> {
     return this.http.post<Todo>(this.todosUrl, todo, httpOptions);
+  }
+
+
+  //Update todos
+
+  updateTodo(todo: Todo):Observable<Todo> {
+
+    const url = `${this.todosUrl}/${todo.id}`
+    return this.http.put<Todo>(url, todo, httpOptions);
   }
 
 
